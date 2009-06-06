@@ -98,6 +98,8 @@ class Window < Qt::MainWindow
 
     
   def play
+    #XXXasrail: dummy test
+    # Essa função deve executar o(s) script(s)
       @model.insertRow(["asd", "kjkjkj", "asd, asda, as"])
   end
   
@@ -153,13 +155,10 @@ end
 def main()
   app = Qt::Application.new(ARGV)
   Qt::TextCodec::setCodecForTr(Qt::TextCodec::codecForName("utf8"))
-
-  #mw = Window.new()
-  #mw.show()
   
   log_model = LogModel.new
-  view = Window.new(log_model)
-  view.show
+  mw = Window.new(log_model)
+  mw.show
 
   app.exec
 end
