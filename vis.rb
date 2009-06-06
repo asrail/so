@@ -21,13 +21,13 @@ class Window < Qt::MainWindow
     }
     @mview.addLayout(row)
 
-    
-    row2 = Qt::HBoxLayout.new
-    row2.addWidget(Qt::Label.new("uno"))
-    row2.addWidget(Qt::Label.new("dos"))
-    row2.addWidget(Qt::Label.new("tres"))    
-    @mview.addLayout(row2)
-    
+    model.arr.each { |row|
+      vrow = Qt::HBoxLayout.new
+      row.each { |col|
+        vrow.addWidget(Qt::Label.new(col) { |l| l.wordWrap = true})
+      }
+      @mview.addLayout(vrow)
+    }
     vp = Qt::VBoxLayout.new()
     vp.addLayout(@mview)
     toolbar = Qt::ToolBar.new(self)
