@@ -17,7 +17,7 @@ class Window < Qt::MainWindow
     
     row = Qt::HBoxLayout.new
     model.headers.each { |header|
-      row.addWidget(Qt::Label.new(header))
+      row.addWidget(Qt::Label.new(header) { |l| l.setBackgroundRole(Qt::Palette::Dark)})
     }
     @mview.addLayout(row)
 
