@@ -7,6 +7,8 @@ class Qt::Action
 end
 
 class Window < Qt::MainWindow
+  slots 'add_row(QString)', :play
+  
   def initialize(model, parent = nil)
     super()
     self.windowTitle = tr("SystemTap logs")
@@ -15,6 +17,8 @@ class Window < Qt::MainWindow
 
     @mview = Qt::VBoxLayout.new()
     
+    @model = model
+    
     row = Qt::HBoxLayout.new
     model.headers.each { |header|
       row.addWidget(Qt::Label.new(header) { |l| l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised); l.setLineWidth(2) })
@@ -22,16 +26,14 @@ class Window < Qt::MainWindow
     @mview.addLayout(row)
 
     model.arr.each { |row|
-      vrow = Qt::HBoxLayout.new
-      row.each { |col|
-        vrow.addWidget(Qt::Label.new(col) { |l| l.wordWrap = true; l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain); l.setAlignment(Qt::AlignTop | Qt::AlignLeft); })
-      }
-      @mview.addLayout(vrow)
+      add_row(row)
     }
     vp = Qt::VBoxLayout.new()
     vp.addLayout(@mview)
     toolbar = Qt::ToolBar.new(self)
 
+    connect(model, SIGNAL('row_added(QString)'), self, SLOT('add_row(QString)'))
+    
     aux_actions[:commands] = [
        [:stop, "images/32/process-stop.png", "&Parar", "Ctrl+p", "Interrompe a execução"], 
        [:play, "images/32/media-playback-start.png", "E&xecutar", "Ctrl+r", "Inicia a execução"] 
@@ -93,11 +95,27 @@ class Window < Qt::MainWindow
     setCentralWidget(central)
     Qt::MetaObject.connectSlotsByName(self)
   end
+
+    
+  def play
+      @model.insertRow(["asd", "kjkjkj", "asd, asda, as"])
+  end
+  
+  def add_row(row)
+    if row.kind_of?String
+      row = row.split(/\\\*\//)
+    end
+    vrow = Qt::HBoxLayout.new
+    row.each { |col|
+      vrow.addWidget(Qt::Label.new(col) { |l| l.wordWrap = true; l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain); l.setAlignment(Qt::AlignTop | Qt::AlignLeft); })
+    }
+    @mview.addLayout(vrow)
+  end
 end
 
 class LogModel < Qt::Object
   attr_accessor :arr, :headers
-  signals 'row_added(QVector<QString>)'
+  signals 'row_added(QString)'
   
   def initialize(parent = nil)
     super(parent)
@@ -123,7 +141,7 @@ class LogModel < Qt::Object
   
   def insertRow(data)
     arr.push(data)
-    emit row_added()
+    emit row_added(data.join('\*/'))
   end
   
   def headerData(section, orientation, role = Qt::DisplayRole)
@@ -142,7 +160,7 @@ def main()
   log_model = LogModel.new
   view = Window.new(log_model)
   view.show
-  
+
   app.exec
 end
 
