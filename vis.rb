@@ -17,14 +17,14 @@ class Window < Qt::MainWindow
     
     row = Qt::HBoxLayout.new
     model.headers.each { |header|
-      row.addWidget(Qt::Label.new(header) { |l| l.setBackgroundRole(Qt::Palette::Dark)})
+      row.addWidget(Qt::Label.new(header) { |l| l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised); l.setLineWidth(2) })
     }
     @mview.addLayout(row)
 
     model.arr.each { |row|
       vrow = Qt::HBoxLayout.new
       row.each { |col|
-        vrow.addWidget(Qt::Label.new(col) { |l| l.wordWrap = true})
+        vrow.addWidget(Qt::Label.new(col) { |l| l.wordWrap = true; l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain) })
       }
       @mview.addLayout(vrow)
     }
