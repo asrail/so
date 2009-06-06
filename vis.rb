@@ -24,7 +24,7 @@ class Window < Qt::MainWindow
     model.arr.each { |row|
       vrow = Qt::HBoxLayout.new
       row.each { |col|
-        vrow.addWidget(Qt::Label.new(col) { |l| l.wordWrap = true; l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain) })
+        vrow.addWidget(Qt::Label.new(col) { |l| l.wordWrap = true; l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain); l.setAlignment(Qt::AlignTop | Qt::AlignLeft); })
       }
       @mview.addLayout(vrow)
     }
