@@ -15,20 +15,20 @@ class Window < Qt::MainWindow
     aux_actions = {}
     @actions = {}
 
-    @grid = Qt::GridLayout.new()
+    scroll = Qt::ScrollArea.new()
+    central = Qt::Widget.new(scroll)
+    @grid = Qt::GridLayout.new(central)
     
     @model = model
     
-    row = Qt::HBoxLayout.new
     model.headers.each_with_index { |header, i|
-      @grid.addWidget(Qt::Label.new(header) { |l| l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised); l.setLineWidth(2); l.setMinimumWidth(200) }, 0, i)
+      @grid.addWidget(Qt::Label.new(header) { |l| l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised); l.setLineWidth(2); l.setMinimumWidth(200); l.setMinimumHeight(30) }, 0, i)
+      @grid.setRowMinimumHeight(0, 40)
     }
 
     model.arr.each { |row|
       add_row(row)
     }
-    vp = Qt::VBoxLayout.new()
-    vp.addLayout(@grid)
     toolbar = Qt::ToolBar.new(self)
 
     connect(model, SIGNAL('row_added(QString)'), self, SLOT('add_row(QString)'))
@@ -89,9 +89,11 @@ class Window < Qt::MainWindow
     setMenuBar(@menubar)
     toolbar.tool_button_style = Qt::ToolButtonTextBesideIcon ##XXXasrail: preferencia...
     addToolBar(toolbar)
-    central = Qt::Widget.new(self)
-    central.setLayout(vp)
-    setCentralWidget(central)
+
+    
+    scroll.setWidget(central)
+    scroll.setMinimumWidth(650)
+    setCentralWidget(scroll)
     Qt::MetaObject.connectSlotsByName(self)
   end
 
@@ -107,11 +109,13 @@ class Window < Qt::MainWindow
       row = row.split(/\\\*\//)
     end
     i = @grid.rowCount
+    @grid.setRowMinimumHeight(i, 40)
     row.each_with_index { |col, j|
       @grid.addWidget(Qt::Label.new(col) { |l|
-                       l.wordWrap = true
-                       l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain)
-                       l.setAlignment(Qt::AlignTop | Qt::AlignLeft)
+                        l.wordWrap = true
+                        l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain)
+                        l.setAlignment(Qt::AlignTop | Qt::AlignLeft)
+                        l.setMinimumHeight(25)
                      }, i, j)
     }
   end
@@ -124,6 +128,11 @@ class LogModel < Qt::Object
   def initialize(parent = nil)
     super(parent)
     @arr = [["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
+            ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
+            ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
+            ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
+            ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
+            ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
             ["xyz", "uuu", "oioiqwueioquwe qweuq weiqu woiquwe qoeu zcmzxn caaaaaaaaaaaaaaaaaamxnc zxczxcz zmxcnzxcn"]]
     @headers = ["baa", "bee", "bii"]
   end
