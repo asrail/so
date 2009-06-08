@@ -17,7 +17,7 @@ class Window < Qt::MainWindow
 
     scroll = Qt::ScrollArea.new()
     central = Qt::Widget.new(scroll)
-    @grid = Qt::GridLayout.new(central)
+    @grid = Qt::GridLayout.new(central) { |g| g.setSizeConstraint(Qt::Layout::SetMinimumSize)}
     
     @model = model
     
@@ -92,7 +92,8 @@ class Window < Qt::MainWindow
 
     
     scroll.setWidget(central)
-    scroll.setMinimumWidth(650)
+    scroll.setMinimumWidth(780)
+    scroll.setSizePolicy(Qt::SizePolicy::MinimumExpanding, Qt::SizePolicy::MinimumExpanding)
     setCentralWidget(scroll)
     Qt::MetaObject.connectSlotsByName(self)
   end
@@ -101,7 +102,8 @@ class Window < Qt::MainWindow
   def play
     #XXXasrail: dummy test
     # Essa função deve executar o(s) script(s)
-      @model.insertRow(["asd", "kjkjkj", "asd, asda, as"])
+      @model.insertRow(["asd", "kjkjkj", "asd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkklmnasdaskdnasdjanskdjanskdjansdjkasndjkansdjkaskdjnasjkdnaksjndkajsndkajsndaks asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasd
+asd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasd"])
   end
   
   def add_row(row)
@@ -112,11 +114,11 @@ class Window < Qt::MainWindow
     @grid.setRowMinimumHeight(i, 40)
     row.each_with_index { |col, j|
       @grid.addWidget(Qt::Label.new(col) { |l|
-                        l.wordWrap = true
-                        l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain)
-                        l.setAlignment(Qt::AlignTop | Qt::AlignLeft)
-                        l.setMinimumHeight(25)
-                     }, i, j)
+        l.wordWrap = true
+        l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain)
+        l.setAlignment(Qt::AlignTop | Qt::AlignLeft)
+        l.setSizePolicy(Qt::SizePolicy::MinimumExpanding, Qt::SizePolicy::MinimumExpanding)
+      }, i, j)
     }
   end
 end
@@ -131,7 +133,11 @@ class LogModel < Qt::Object
             ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
             ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
             ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
-            ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
+            ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd
+alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd
+alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd
+alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd
+"],
             ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
             ["xyz", "uuu", "oioiqwueioquwe qweuq weiqu woiquwe qoeu zcmzxn caaaaaaaaaaaaaaaaaamxnc zxczxcz zmxcnzxcn"]]
     @headers = ["baa", "bee", "bii"]
