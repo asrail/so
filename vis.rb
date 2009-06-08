@@ -15,21 +15,20 @@ class Window < Qt::MainWindow
     aux_actions = {}
     @actions = {}
 
-    @mview = Qt::VBoxLayout.new()
+    @grid = Qt::GridLayout.new()
     
     @model = model
     
     row = Qt::HBoxLayout.new
-    model.headers.each { |header|
-      row.addWidget(Qt::Label.new(header) { |l| l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised); l.setLineWidth(2); l.setMinimumWidth(200) })
+    model.headers.each_with_index { |header, i|
+      @grid.addWidget(Qt::Label.new(header) { |l| l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised); l.setLineWidth(2); l.setMinimumWidth(200) }, 0, i)
     }
-    @mview.addLayout(row)
 
     model.arr.each { |row|
       add_row(row)
     }
     vp = Qt::VBoxLayout.new()
-    vp.addLayout(@mview)
+    vp.addLayout(@grid)
     toolbar = Qt::ToolBar.new(self)
 
     connect(model, SIGNAL('row_added(QString)'), self, SLOT('add_row(QString)'))
@@ -107,16 +106,14 @@ class Window < Qt::MainWindow
     if row.kind_of?String
       row = row.split(/\\\*\//)
     end
-    vrow = Qt::HBoxLayout.new
-    row.each { |col|
-      vrow.addWidget(Qt::Label.new(col) { |l|
+    i = @grid.rowCount
+    row.each_with_index { |col, j|
+      @grid.addWidget(Qt::Label.new(col) { |l|
                        l.wordWrap = true
                        l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain)
                        l.setAlignment(Qt::AlignTop | Qt::AlignLeft)
-                       l.setMinimumWidth(200)
-                     })
+                     }, i, j)
     }
-    @mview.addLayout(vrow)
   end
 end
 
