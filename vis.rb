@@ -21,7 +21,7 @@ class Window < Qt::MainWindow
     
     row = Qt::HBoxLayout.new
     model.headers.each { |header|
-      row.addWidget(Qt::Label.new(header) { |l| l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised); l.setLineWidth(2) })
+      row.addWidget(Qt::Label.new(header) { |l| l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised); l.setLineWidth(2); l.setMinimumWidth(200) })
     }
     @mview.addLayout(row)
 
@@ -109,7 +109,12 @@ class Window < Qt::MainWindow
     end
     vrow = Qt::HBoxLayout.new
     row.each { |col|
-      vrow.addWidget(Qt::Label.new(col) { |l| l.wordWrap = true; l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain); l.setAlignment(Qt::AlignTop | Qt::AlignLeft); })
+      vrow.addWidget(Qt::Label.new(col) { |l|
+                       l.wordWrap = true
+                       l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain)
+                       l.setAlignment(Qt::AlignTop | Qt::AlignLeft)
+                       l.setMinimumWidth(200)
+                     })
     }
     @mview.addLayout(vrow)
   end
