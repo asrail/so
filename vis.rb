@@ -92,7 +92,7 @@ class Window < Qt::MainWindow
 
     
     scroll.setWidget(central)
-    scroll.setMinimumWidth(780)
+    scroll.setMinimumWidth(760)
     scroll.setSizePolicy(Qt::SizePolicy::MinimumExpanding, Qt::SizePolicy::MinimumExpanding)
     setCentralWidget(scroll)
     Qt::MetaObject.connectSlotsByName(self)
