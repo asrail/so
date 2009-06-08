@@ -22,7 +22,12 @@ class Window < Qt::MainWindow
     @model = model
     
     model.headers.each_with_index { |header, i|
-      @grid.addWidget(Qt::Label.new(header) { |l| l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised); l.setLineWidth(2); l.setMinimumWidth(200); l.setMinimumHeight(30) }, 0, i)
+      @grid.addWidget(Qt::Label.new(header) { |l|
+                        l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised)
+                        l.setLineWidth(2)
+                        # Deve ser configurável
+                        l.setMinimumWidth(180)
+                        l.setMinimumHeight(30) }, 0, i)
       @grid.setRowMinimumHeight(0, 40)
     }
 
