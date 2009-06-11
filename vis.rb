@@ -15,21 +15,25 @@ class Window < Qt::MainWindow
     aux_actions = {}
     @actions = {}
 
-    @mview = Qt::VBoxLayout.new()
+    scroll = Qt::ScrollArea.new()
+    central = Qt::Widget.new(scroll)
+    @grid = Qt::GridLayout.new(central) { |g| g.setSizeConstraint(Qt::Layout::SetMinimumSize)}
     
     @model = model
     
-    row = Qt::HBoxLayout.new
-    model.headers.each { |header|
-      row.addWidget(Qt::Label.new(header) { |l| l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised); l.setLineWidth(2) })
+    model.headers.each_with_index { |header, i|
+      @grid.addWidget(Qt::Label.new(header) { |l|
+                        l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised)
+                        l.setLineWidth(2)
+                        # Deve ser configurável
+                        l.setMinimumWidth(180)
+                        l.setMinimumHeight(30) }, 0, i)
+      @grid.setRowMinimumHeight(0, 40)
     }
-    @mview.addLayout(row)
 
     model.arr.each { |row|
       add_row(row)
     }
-    vp = Qt::VBoxLayout.new()
-    vp.addLayout(@mview)
     toolbar = Qt::ToolBar.new(self)
 
     connect(model, SIGNAL('row_added(QString)'), self, SLOT('add_row(QString)'))
@@ -90,9 +94,12 @@ class Window < Qt::MainWindow
     setMenuBar(@menubar)
     toolbar.tool_button_style = Qt::ToolButtonTextBesideIcon ##XXXasrail: preferencia...
     addToolBar(toolbar)
-    central = Qt::Widget.new(self)
-    central.setLayout(vp)
-    setCentralWidget(central)
+
+    
+    scroll.setWidget(central)
+    scroll.setMinimumWidth(760)
+    scroll.setSizePolicy(Qt::SizePolicy::MinimumExpanding, Qt::SizePolicy::MinimumExpanding)
+    setCentralWidget(scroll)
     Qt::MetaObject.connectSlotsByName(self)
   end
 
@@ -100,18 +107,24 @@ class Window < Qt::MainWindow
   def play
     #XXXasrail: dummy test
     # Essa função deve executar o(s) script(s)
-      @model.insertRow(["asd", "kjkjkj", "asd, asda, as"])
+      @model.insertRow(["asd", "kjkjkj", "asd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkklmnasdaskdnasdjanskdjanskdjansdjkasndjkansdjkaskdjnasjkdnaksjndkajsndkajsndaks asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasd
+asd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasd"])
   end
   
   def add_row(row)
     if row.kind_of?String
       row = row.split(/\\\*\//)
     end
-    vrow = Qt::HBoxLayout.new
-    row.each { |col|
-      vrow.addWidget(Qt::Label.new(col) { |l| l.wordWrap = true; l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain); l.setAlignment(Qt::AlignTop | Qt::AlignLeft); })
+    i = @grid.rowCount
+    @grid.setRowMinimumHeight(i, 40)
+    row.each_with_index { |col, j|
+      @grid.addWidget(Qt::Label.new(col) { |l|
+        l.wordWrap = true
+        l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Plain)
+        l.setAlignment(Qt::AlignTop | Qt::AlignLeft)
+        l.setSizePolicy(Qt::SizePolicy::MinimumExpanding, Qt::SizePolicy::MinimumExpanding)
+      }, i, j)
     }
-    @mview.addLayout(vrow)
   end
 end
 
@@ -122,6 +135,15 @@ class LogModel < Qt::Object
   def initialize(parent = nil)
     super(parent)
     @arr = [["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
+            ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
+            ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
+            ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
+            ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd
+alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd
+alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd
+alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd
+"],
+            ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
             ["xyz", "uuu", "oioiqwueioquwe qweuq weiqu woiquwe qoeu zcmzxn caaaaaaaaaaaaaaaaaamxnc zxczxcz zmxcnzxcn"]]
     @headers = ["baa", "bee", "bii"]
   end
