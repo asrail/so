@@ -1,0 +1,32 @@
+#! /usr/bin/env stap
+
+global fds
+
+probe begin {
+  printf("iniciando...\n")
+}
+
+probe syscall.open {
+  if (pid() == target()) {
+    printf("Aberto - '%s' - %d\n",
+           user_string($filename),
+           gettimeofday_s())
+  }
+}
+
+probe syscall.open.return {
+  if (pid() == target()) {
+    fds[$return] = user_string($filename)
+  }
+}
+
+probe syscall.close {
+  if(strlen(fds[$fd]) > 0) {
+    if (pid() == target()) {
+      printf("Fechado - '%s' - %d\n",
+             fds[$fd],
+             gettimeofday_s())
+    }
+    delete fds[$fd]
+  }
+}
