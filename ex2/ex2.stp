@@ -31,7 +31,7 @@ probe begin {
 probe kernel.function("down") {
   if(pid() == target()) {
     printf("down %d\n", tid())
-    print_backtrace()
+    printf("%d\n", user_int($sem->count))
   }
 }
 
@@ -44,6 +44,18 @@ probe kernel.function("down_interruptible") {
 probe kernel.function("down_trylock") {
   if(pid() == target()) {
     printf("down_trylock %d\n", tid())
+  }
+}
+
+probe kernel.function("down_killable") {
+  if(pid() == target()) {
+    printf("down_killable %d\n", tid())
+  }
+}
+
+probe kernel.function("down_timeout") {
+  if(pid() == target()) {
+    printf("down_timeout %d\n", tid())
   }
 }
 
