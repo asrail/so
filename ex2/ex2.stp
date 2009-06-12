@@ -1,0 +1,120 @@
+#!/usr/bin/env stap
+
+probe begin {
+  printf("iniciando...\n")
+}
+
+# probe kernel.function("spin_lock_irqsave") {
+#   printf("spin_lock_irqsave %d\n", tid())
+# }
+
+# probe kernel.function("spin_unlock_irqrestore") {
+#   printf("spin_unlock_irqrestore %d\n", tid())
+# }
+
+# probe kernel.function("spin_lock_irq") {
+#   printf("spin_lock_irq %d\n", tid())
+# }
+
+# probe kernel.function("spin_unlock_irq") {
+#   printf("spin_unlock_irq %d\n", tid())
+# }
+
+# probe kernel.function("save_flags") {
+#   printf("save_flags %d\n", tid())
+# }
+
+# probe kernel.function("restore_flags") {
+#   printf("restore_flags %d\n", tid())
+# }
+
+probe kernel.function("down") {
+  if(pid() == target()) {
+    printf("down %d\n", tid())
+    print_backtrace()
+  }
+}
+
+probe kernel.function("down_interruptible") {
+  if(pid() == target()) {
+    printf("down_interruptible %d\n", tid())
+  }
+}
+
+probe kernel.function("down_trylock") {
+  if(pid() == target()) {
+    printf("down_trylock %d\n", tid())
+  }
+}
+
+probe kernel.function("up") {
+  if(pid() == target()) {
+    printf("up %d %s\n", tid(), execname())
+  }
+}
+
+probe kernel.function("sema_init") {
+  if(pid() == target()) {
+    printf("sema_init %d %s\n", tid(), execname())
+  }
+}
+
+# probe kernel.function("read_lock") {
+# printf("read_lock %d %s\n", tid(), execname())
+# }
+
+# probe kernel.function("read_unlock") {
+# printf("read_unlock %d %s\n", tid(), execname())
+# }
+
+# probe kernel.function("write_lock") {
+# printf("write_lock %d %s\n", tid(), execname())
+# }
+
+# probe kernel.function("write_unlock") {
+# printf("write_unlock %d %s\n", tid(), execname())
+# }
+
+probe kernel.function("down_read") {
+  if(pid() == target()) {
+    printf("down_read %d %s\n", tid(), execname())
+  }
+}
+
+probe kernel.function("down_write") {
+  if(pid() == target()) {
+    printf("down_write %d %s\n", tid(), execname())
+  }
+}
+
+probe kernel.function("up_read") {
+  if(pid() == target()) {
+    printf("up_read %d %s\n", tid(), execname())
+  }
+}
+
+probe kernel.function("up_write") {
+  if(pid() == target()) {
+    printf("up_write %d %s\n", tid(), execname())
+  }
+}
+
+# probe kernel.function("br_read_lock") {
+# printf("br_read_lock %d %s\n", tid(), execname())
+# }
+
+# probe kernel.function("br_read_unlock") {
+# printf("br_read_unlock %d %s\n", tid(), execname())
+# }
+
+probe kernel.function("lock_kernel") {
+  if(pid() == target()) {
+    printf("lock_kernel %d %s\n", tid(), execname())
+  }
+}
+
+probe kernel.function("unlock_kernel") {
+  if(pid() == target()) {
+    printf("unlock_kernel %d %s\n", tid(), execname())
+  }
+}
