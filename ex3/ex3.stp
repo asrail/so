@@ -1,14 +1,28 @@
 #!/usr/bin/env stap
 
+function parent:string (file) {
+  directory = ""
+  dentry = @cast(file, "file")->f_path->dentry->d_parent
+  parent = kernel_string(@cast(dentry, "dentry")->d_name->name)
+  if (parent == "/")
+    directory = parent
+  while (parent != "/") {
+    directory = "/" . parent . directory
+    dentry = @cast(dentry, "dentry")->d_parent
+    parent = kernel_string(@cast(dentry, "dentry")->d_name->name)
+  }
+  return directory
+}
+
 probe vfs.write.return {
   if ((pid() == target()) && (ret > 0) && (devname != "N/A")) {
-    printf("WRITE: %s - %s\n", kernel_string(@cast($file->f_path->mnt, "vfsmount")->mnt_devname), kernel_string($file->f_path->dentry->d_name->name))
+    printf("WRITE: %s - %s - %s\n", kernel_string(@cast($file->f_path->mnt, "vfsmount")->mnt_devname), parent($file), kernel_string($file->f_path->dentry->d_name->name))
   }
 }
 
 
 probe vfs.read.return {
   if ((pid() == target()) && (ret > 0) && (devname != "N/A")) {
-    printf("READ: %s - %s\n", kernel_string(@cast($file->f_path->mnt, "vfsmount")->mnt_devname), kernel_string($file->f_path->dentry->d_name->name))
+    printf("READ: %s - %s - %s\n", kernel_string(@cast($file->f_path->mnt, "vfsmount")->mnt_devname), parent($file), kernel_string($file->f_path->dentry->d_name->name))
   }
 }
