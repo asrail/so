@@ -2,14 +2,23 @@
 
 function parent:string (file) {
   directory = ""
+  mountpoint = ""
   dentry = @cast(file, "file")->f_path->dentry->d_parent
   parent = kernel_string(@cast(dentry, "dentry")->d_name->name)
-  if (parent == "/")
+  mnt = @cast(file, "file")->f_path->mnt
+  root = kernel_string(@cast(mnt, "vfsmount")->mnt_root->d_name->name)
+  if (parent == root)
     directory = parent
-  while (parent != "/") {
-    directory = "/" . parent . directory
-    dentry = @cast(dentry, "dentry")->d_parent
-    parent = kernel_string(@cast(dentry, "dentry")->d_name->name)
+  while (mountpoint != root) {
+    while (parent != root) {
+      directory = "/" . parent . directory
+      dentry = @cast(dentry, "dentry")->d_parent
+      parent = kernel_string(@cast(dentry, "dentry")->d_name->name)
+    }
+    dentry = @cast(mnt, "vfsmount")->mnt_mountpoint
+    parent = kernel_string(@cast(mnt, "vfsmount")->mnt_mountpoint->d_name->name)
+    mountpoint = parent
+    mnt = @cast(mnt, "vfsmount")->mnt_parent
   }
   return directory
 }

@@ -6,17 +6,17 @@ probe begin {
   printf("iniciando...\n")
 }
 
-probe syscall.open {
-  if (pid() == target()) {
-    printf("Aberto - '%s' - %d\n",
-           user_string($filename),
-           gettimeofday_s())
-  }
-}
-
 probe syscall.open.return {
   if (pid() == target()) {
-    fds[$return] = user_string($filename)
+    if($return > 0) {
+      fds[$return] = user_string($filename)
+      printf("Aberto - '%s' - %d\n",
+             user_string($filename),
+             gettimeofday_s())
+
+    }
+    else
+      printf("Falha ao abrir %s\n", user_string($filename))
   }
 }
 
