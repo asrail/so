@@ -4,6 +4,10 @@ probe begin {
   printf("iniciando...\n")
 }
 
+### As funções de spinlock precisam de trace_mark
+
+
+
 # probe kernel.function("spin_lock_irqsave") {
 #   printf("spin_lock_irqsave %d\n", tid())
 # }
@@ -30,44 +34,37 @@ probe begin {
 
 probe kernel.function("down") {
   if(pid() == target()) {
-    printf("down %d\n", tid())
-    printf("%d\n", user_int($sem->count))
+    printf("down %d count %d name %s execname %s", tid(), user_int($sem->count), kernel_string($sem->lock->dep_map->name), execname())
   }
 }
 
 probe kernel.function("down_interruptible") {
   if(pid() == target()) {
-    printf("down_interruptible %d\n", tid())
+    printf("down_interruptible %d count %d name %s execname %s", tid(), user_int($sem->count), kernel_string($sem->lock->dep_map->name), execname())
   }
 }
 
 probe kernel.function("down_trylock") {
   if(pid() == target()) {
-    printf("down_trylock %d\n", tid())
+    printf("down_trylock %d count %d name %s execname %s", tid(), user_int($sem->count), kernel_string($sem->lock->dep_map->name), execname())
   }
 }
 
 probe kernel.function("down_killable") {
   if(pid() == target()) {
-    printf("down_killable %d\n", tid())
+    printf("down_killable %d count %d name %s execname %s", tid(), user_int($sem->count), kernel_string($sem->lock->dep_map->name), execname())
   }
 }
 
 probe kernel.function("down_timeout") {
   if(pid() == target()) {
-    printf("down_timeout %d\n", tid())
+    printf("down_timeout %d count %d name %s execname %s", tid(), user_int($sem->count), kernel_string($sem->lock->dep_map->name), execname())
   }
 }
 
 probe kernel.function("up") {
   if(pid() == target()) {
-    printf("up %d %s\n", tid(), execname())
-  }
-}
-
-probe kernel.function("sema_init") {
-  if(pid() == target()) {
-    printf("sema_init %d %s\n", tid(), execname())
+    printf("up %d count %d name %s execname %s", tid(), user_int($sem->count), kernel_string($sem->lock->dep_map->name), execname())
   }
 }
 
@@ -89,25 +86,25 @@ probe kernel.function("sema_init") {
 
 probe kernel.function("down_read") {
   if(pid() == target()) {
-    printf("down_read %d %s\n", tid(), execname())
+    printf("down_read %d %s %s\n", tid(), kernel_string($sem->dep_map->name), execname())
   }
 }
 
 probe kernel.function("down_write") {
   if(pid() == target()) {
-    printf("down_write %d %s\n", tid(), execname())
+    printf("down_write %d %s %s\n", tid(), kernel_string($sem->dep_map->name), execname())
   }
 }
 
 probe kernel.function("up_read") {
   if(pid() == target()) {
-    printf("up_read %d %s\n", tid(), execname())
+    printf("up_read %d %s %s\n", tid(), kernel_string($sem->dep_map->name), execname())
   }
 }
 
 probe kernel.function("up_write") {
   if(pid() == target()) {
-    printf("up_write %d %s\n", tid(), execname())
+    printf("up_write %d %s %s\n", tid(), kernel_string($sem->dep_map->name), execname())
   }
 }
 
