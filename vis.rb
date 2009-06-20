@@ -7,19 +7,20 @@ class Qt::Action
 end
 
 class Window < Qt::MainWindow
-  slots 'add_row(QString)', :play
+  attr_accessor :script
+  slots 'add_row(QString)', :play, :open_1, :open_2, :open_3
   
   def initialize(model, parent = nil)
-    super()
+    super(parent)
     self.windowTitle = tr("SystemTap logs")
     aux_actions = {}
     @actions = {}
-
+    @script = nil
     scroll = Qt::ScrollArea.new()
     central = Qt::Widget.new(scroll)
-    @grid = Qt::GridLayout.new(central) { |g| g.setSizeConstraint(Qt::Layout::SetMinimumSize)}
-    
     @model = model
+    
+    @grid = Qt::GridLayout.new(central) { |g| g.setSizeConstraint(Qt::Layout::SetMinimumSize)}
     
     model.headers.each_with_index { |header, i|
       @grid.addWidget(Qt::Label.new(header) { |l|
@@ -44,9 +45,16 @@ class Window < Qt::MainWindow
     ]
 
     aux_actions[:file] = [
-       [:open_file, "images/32/document-open.png", "&Abrir",
-        "Ctrl+o", "Carregar um script de um arquivo"],
-       [:save_machine, "images/32/document-save.png", "&Salvar",
+       [:open, "images/32/document-open.png", "&Abrir",
+        "Ctrl+1", "Carrega um script de um arquivo"],
+       [:open_1, "images/32/document-open.png", "Script &1",
+        "Ctrl+1", "Carrega o script do exercício 1"],
+       [:open_2, "images/32/document-open.png", "Script &2",
+        "Ctrl+2", "Carrega o script do exercício 2"],
+       [:open_3, "images/32/document-open.png", "Script &3",
+        "Ctrl+3", "Carrega o script do exercício 3"],
+
+       [:save, "images/32/document-save.png", "&Salvar",
         "Ctrl+s", "Salva a saída para um arquivo"],
        [:close, "images/32/system-log-out.png", "Sai&r",
         "Ctrl+q", "Sai do programa"]
@@ -126,6 +134,28 @@ asd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
       }, i, j)
     }
   end
+  
+  def open
+    define_script (Qt::FileDialog.getOpenFileName(self, "Abrir script",
+                                   "", "Scripts (*stp)"))
+  end
+    
+  def open_1
+    define_script("./ex1/ex1.stp")
+  end
+
+  def open_2
+    define_script("./ex2/ex2.stp")
+  end
+
+  def open_3
+    define_script("./ex3/ex3.stp")
+  end
+  
+  def define_script(script)
+    @script = script
+  end
+  
 end
 
 class LogModel < Qt::Object
