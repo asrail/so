@@ -1,4 +1,12 @@
 #!/usr/bin/env stap
+# Operação - Nome - Caminho - Tempo - Conteúdo
+# string - string - string - time - string
+# 150 - 300 - 500
+# 70632472-cf5a-4872-b1a8-8202bf6a8b71
+
+function sep:string () {
+  return "\n#***70632472-cf5a-4872-b1a8-8202bf6a8b71\n"
+}
 
 function parent:string (file) {
   directory = ""
@@ -25,13 +33,21 @@ function parent:string (file) {
 
 probe vfs.write.return {
   if ((pid() == target()) && (ret > 0) && (devname != "N/A")) {
-    printf("WRITE: %s - %s - %s\n", kernel_string(@cast($file->f_path->mnt, "vfsmount")->mnt_devname), parent($file), kernel_string($file->f_path->dentry->d_name->name))
+    printf("Escrita %s %s %s %s %s %d %s %s %s", sep(),
+           kernel_string($file->f_path->dentry->d_name->name), sep(),
+           parent($file), sep(),
+           gettimeofday_s(), sep(),
+           kernel_string($buf), sep())
   }
 }
 
 
 probe vfs.read.return {
   if ((pid() == target()) && (ret > 0) && (devname != "N/A")) {
-    printf("READ: %s - %s - %s\n", kernel_string(@cast($file->f_path->mnt, "vfsmount")->mnt_devname), parent($file), kernel_string($file->f_path->dentry->d_name->name))
+    printf("Leitura %s %s %s %s %s %d %s %s %s", sep(),
+           kernel_string($file->f_path->dentry->d_name->name), sep(),
+           parent($file), sep(),
+           gettimeofday_s(), sep(),
+           kernel_string($buf), sep())
   }
 }
