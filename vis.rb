@@ -11,7 +11,7 @@ class Window < Qt::MainWindow
   attr_accessor :script
   slots 'add_row(QString)', :play, :open_1, :open_2, :open_3, :open
   
-  def initialize(model, parent = nil)
+  def initialize(parent = nil)
     super(parent)
     self.windowTitle = tr("SystemTap logs")
     aux_actions = {}
@@ -20,12 +20,8 @@ class Window < Qt::MainWindow
     @scroll = Qt::ScrollArea.new()
     @scroll.setWidgetResizable(true)
     @central = Qt::Widget.new(@scroll)
-    @model = model
-    
     toolbar = Qt::ToolBar.new(self)
 
-    connect(model, SIGNAL('row_added(QString)'), self, SLOT('add_row(QString)'))
-    
     aux_actions[:commands] = [
        [:stop, "images/32/process-stop.png", "&Parar", "Ctrl+p", "Interrompe a execução"], 
        [:play, "images/32/media-playback-start.png", "E&xecutar", "Ctrl+r", "Inicia a execução"] 
@@ -90,6 +86,7 @@ class Window < Qt::MainWindow
     toolbar.tool_button_style = Qt::ToolButtonTextBesideIcon ##XXXasrail: preferencia...
     addToolBar(toolbar)
 
+    @grid = Qt::GridLayout.new(@central) { |g| g.setSizeConstraint(Qt::Layout::SetMinimumSize)}
     
     @scroll.setWidget(@central)
     @scroll.setMinimumWidth(760)
@@ -102,12 +99,26 @@ class Window < Qt::MainWindow
   def play
     #XXXasrail: dummy test
     # Essa função deve executar o(s) script(s)
-      @model.insertRow(["asd", "kjkjkj", "asd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkklmnasdaskdnasdjanskdjanskdjansdjkasndjkansdjkaskdjnasjkdnaksjndkajsndkajsndaks asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasd
+    return if @model.nil?
+    @model.insertRow(["asd", "kjkjkj", "asd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkklmnasdaskdnasdjanskdjanskdjansdjkasndjkansdjkaskdjnasjkdnaksjndkajsndkajsndaks asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasd
 asd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasd"])
   end
   
   def build_grid
-    @grid = Qt::GridLayout.new(@central) { |g| g.setSizeConstraint(Qt::Layout::SetMinimumSize)}
+    @model = LogModel.new
+    connect(@model, SIGNAL('row_added(QString)'), self, SLOT('add_row(QString)'))
+    unless @grid.nil?
+      @grid.rowCount.times { |i|
+        @grid.columnCount.times { |j|
+          item = @grid.itemAtPosition(i, j)
+          if (!item.nil?) && (!item.isEmpty)
+            widget = item.widget
+            @grid.removeWidget(widget)
+            widget.deleteLater
+          end
+        }
+      }
+    end
     
     @model.headers.each_with_index { |header, i|
       @grid.addWidget(Qt::Label.new(header) { |l|
@@ -138,6 +149,7 @@ asd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
         l.setSizePolicy(Qt::SizePolicy::MinimumExpanding, Qt::SizePolicy::MinimumExpanding)
       }, i, j)
     }
+    @scroll.update
   end
   
   def open_helper(file)
@@ -172,7 +184,7 @@ class LogModel < Qt::Object
   attr_accessor :arr, :headers
   signals 'row_added(QString)'
   
-  def initialize(parent = nil)
+  def initialize(parent = nil, headers = ["baa", "bee", rand.to_s])
     super(parent)
     @arr = [["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
             ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
@@ -185,7 +197,7 @@ alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjdalskdjals
 "],
             ["abc", "ddd", "alskdjalsdkjaksldja asdjk alsdj asld asldj aslja sdj adlajsk alksjakdjd"],
             ["xyz", "uuu", "oioiqwueioquwe qweuq weiqu woiquwe qoeu zcmzxn caaaaaaaaaaaaaaaaaamxnc zxczxcz zmxcnzxcn"]]
-    @headers = ["baa", "bee", "bii"]
+    @headers = headers
   end
   
   def rowCount(row = 0, col = 0)
@@ -218,8 +230,7 @@ def main()
   app = Qt::Application.new(ARGV)
   Qt::TextCodec::setCodecForTr(Qt::TextCodec::codecForName("utf8"))
   
-  log_model = LogModel.new
-  mw = Window.new(log_model)
+  mw = Window.new
   mw.show
 
   app.exec
