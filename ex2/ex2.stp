@@ -8,28 +8,20 @@ probe begin {
 
 
 
-# probe kernel.function("spin_lock_irqsave") {
-#   printf("spin_lock_irqsave %d\n", tid())
-# }
+probe kernel.mark("spin_lock_irqsave_acquired") {
+  printf("spin_lock_irqsave %d\n", tid())
+}
 
 # probe kernel.function("spin_unlock_irqrestore") {
 #   printf("spin_unlock_irqrestore %d\n", tid())
 # }
 
-# probe kernel.function("spin_lock_irq") {
-#   printf("spin_lock_irq %d\n", tid())
-# }
+probe kernel.mark("spin_lock_irq_acquired") {
+  printf("spin_lock_irq %d\n", tid())
+}
 
 # probe kernel.function("spin_unlock_irq") {
 #   printf("spin_unlock_irq %d\n", tid())
-# }
-
-# probe kernel.function("save_flags") {
-#   printf("save_flags %d\n", tid())
-# }
-
-# probe kernel.function("restore_flags") {
-#   printf("restore_flags %d\n", tid())
 # }
 
 probe kernel.function("down") {
@@ -68,9 +60,9 @@ probe kernel.function("up") {
   }
 }
 
-# probe kernel.function("read_lock") {
-# printf("read_lock %d %s\n", tid(), execname())
-# }
+probe kernel.mark("read_lock_acquired") {
+  printf("read_lock %d %s\n", tid(), execname())
+}
 
 # probe kernel.function("read_unlock") {
 # printf("read_unlock %d %s\n", tid(), execname())
