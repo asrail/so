@@ -1,3 +1,4 @@
+require 'pp'
 require 'Qt4'
 $KCODE='utf8'
 
@@ -8,7 +9,7 @@ end
 
 class Window < Qt::MainWindow
   attr_accessor :script
-  slots 'add_row(QString)', :play, :open_1, :open_2, :open_3
+  slots 'add_row(QString)', :play, :open_1, :open_2, :open_3, :open
   
   def initialize(model, parent = nil)
     super(parent)
@@ -16,25 +17,11 @@ class Window < Qt::MainWindow
     aux_actions = {}
     @actions = {}
     @script = nil
-    scroll = Qt::ScrollArea.new()
-    central = Qt::Widget.new(scroll)
+    @scroll = Qt::ScrollArea.new()
+    @scroll.setWidgetResizable(true)
+    @central = Qt::Widget.new(@scroll)
     @model = model
     
-    @grid = Qt::GridLayout.new(central) { |g| g.setSizeConstraint(Qt::Layout::SetMinimumSize)}
-    
-    model.headers.each_with_index { |header, i|
-      @grid.addWidget(Qt::Label.new(header) { |l|
-                        l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised)
-                        l.setLineWidth(2)
-                        # Deve ser configurável
-                        l.setMinimumWidth(180)
-                        l.setMinimumHeight(30) }, 0, i)
-      @grid.setRowMinimumHeight(0, 40)
-    }
-
-    model.arr.each { |row|
-      add_row(row)
-    }
     toolbar = Qt::ToolBar.new(self)
 
     connect(model, SIGNAL('row_added(QString)'), self, SLOT('add_row(QString)'))
@@ -46,7 +33,7 @@ class Window < Qt::MainWindow
 
     aux_actions[:file] = [
        [:open, "images/32/document-open.png", "&Abrir",
-        "Ctrl+1", "Carrega um script de um arquivo"],
+        "Ctrl+o", "Carrega um script de um arquivo"],
        [:open_1, "images/32/document-open.png", "Script &1",
         "Ctrl+1", "Carrega o script do exercício 1"],
        [:open_2, "images/32/document-open.png", "Script &2",
@@ -104,10 +91,10 @@ class Window < Qt::MainWindow
     addToolBar(toolbar)
 
     
-    scroll.setWidget(central)
-    scroll.setMinimumWidth(760)
-    scroll.setSizePolicy(Qt::SizePolicy::MinimumExpanding, Qt::SizePolicy::MinimumExpanding)
-    setCentralWidget(scroll)
+    @scroll.setWidget(@central)
+    @scroll.setMinimumWidth(760)
+    @scroll.setSizePolicy(Qt::SizePolicy::MinimumExpanding, Qt::SizePolicy::MinimumExpanding)
+    setCentralWidget(@scroll)
     Qt::MetaObject.connectSlotsByName(self)
   end
 
@@ -117,6 +104,24 @@ class Window < Qt::MainWindow
     # Essa função deve executar o(s) script(s)
       @model.insertRow(["asd", "kjkjkj", "asd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkklmnasdaskdnasdjanskdjanskdjansdjkasndjkansdjkaskdjnasjkdnaksjndkajsndkajsndaks asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasd
 asd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasdasd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkl asdkajs klasdalksd laksd jakljsdakljsdakljsdklasj aklsdalskd askld askld askld asdkasd alskd asdkl asdla sdaklsd alskd aslkd aslkdjaskdalsdjaskl daslkd askldasjdaksdj asldkajsd alsdlkasj daklsd alsdalsd alsd asdl asdasjdlaskd aslkd asldkajsdklasdlkasd"])
+  end
+  
+  def build_grid
+    @grid = Qt::GridLayout.new(@central) { |g| g.setSizeConstraint(Qt::Layout::SetMinimumSize)}
+    
+    @model.headers.each_with_index { |header, i|
+      @grid.addWidget(Qt::Label.new(header) { |l|
+                        l.setFrameStyle(Qt::Frame::Panel | Qt::Frame::Raised)
+                        l.setLineWidth(2)
+                        # Deve ser configurável
+                        l.setMinimumWidth(180)
+                        l.setMinimumHeight(30) }, 0, i)
+      @grid.setRowMinimumHeight(0, 40)
+    }
+    
+    @model.arr.each { |row|
+      add_row(row)
+    }
   end
   
   def add_row(row)
@@ -135,21 +140,26 @@ asd, asda, as kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
     }
   end
   
+  def open_helper(file)
+    #load_script
+    build_grid
+  end
+  
   def open
-    define_script (Qt::FileDialog.getOpenFileName(self, "Abrir script",
+    open_helper(Qt::FileDialog.getOpenFileName(self, "Abrir script",
                                    "", "Scripts (*stp)"))
   end
     
   def open_1
-    define_script("./ex1/ex1.stp")
+    open_helper("./ex1/ex1.stp")
   end
 
   def open_2
-    define_script("./ex2/ex2.stp")
+    open_helper("./ex2/ex2.stp")
   end
 
   def open_3
-    define_script("./ex3/ex3.stp")
+    open_helper("./ex3/ex3.stp")
   end
   
   def define_script(script)
